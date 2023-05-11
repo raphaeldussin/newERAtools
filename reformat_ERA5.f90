@@ -1,0 +1,130 @@
+PROGRAM reformat_ERA5
+  !!-----------------------------------------------------------------------------
+  !!                 *** Program reformat_ERA5  ***
+  !!
+  !!   Purpose : produce a netcdf files which is just the symetric of the
+  !!            input file.
+  !!
+  !!   Method : read the original file, flip data and write.
+  !!
+  !!  history:  Adapted from J.M. Molines (Septembre 2009)
+  !!            R. Dussin (May 2023)
+  !!----------------------------------------------------------------------------
+  !!----------------------------------------------------------------------------
+
+  USE netcdf
+  INTEGER :: iargc, narg, ipos
+  INTEGER :: npi, npj, npt
+  REAL(KIND=4), DIMENSION(:), ALLOCATABLE :: rlon, rlat, zrlat
+  REAL(KIND=4), DIMENSION(:), ALLOCATABLE :: time
+
+  REAL(KIND=4), DIMENSION(:,:) , ALLOCATABLE :: var, ivar
+  CHARACTER(LEN=80) :: cfilin, cfilout, cvar
+  CHARACTER(LEN=512) :: catt
+
+
+  ! netcdf stuff
+  INTEGER :: istatus, ncid, id
+  INTEGER :: ncout, idx, idy, idt, idvx, idvy, idvt, idv
+  INTEGER :: k, kt, natt
+
+  narg=iargc()
+  IF ( narg /= 3 ) THEN
+     PRINT *,' USAGE: reformat_ERA5 file variable fileout '
+     PRINT *,'      produces fileout symetric to the input file '
+     PRINT *,'      with same variables and attributes '
+     STOP
+  ENDIF
+
+  CALL getarg(1,cfilin)
+  CALL getarg(2,cvar)
+  CALL getarg(3,cfilout)
+
+  PRINT *, "read ", TRIM(cvar), "from ", TRIM(cfilin)
+  PRINT *, "output in: ", TRIM(cfilout)
+
+  !--------------------- open input file
+  istatus=NF90_OPEN(cfilin,NF90_NOWRITE,ncid)
+
+  istatus=NF90_INQ_DIMID(ncid,'longitude',id)  ; istatus=NF90_INQUIRE_DIMENSION(ncid,id,len=npi)
+  istatus=NF90_INQ_DIMID(ncid,'latitude',id)   ; istatus=NF90_INQUIRE_DIMENSION(ncid,id,len=npj)
+  istatus=NF90_INQ_DIMID(ncid,'time',id)       ; istatus=NF90_INQUIRE_DIMENSION(ncid,id,len=npt) 
+
+  ALLOCATE ( rlon(npi) )
+  ALLOCATE ( rlat(npj), zrlat(npj) )
+  ALLOCATE ( var(npi,npj), ivar(npi,npj) )
+  ALLOCATE ( time(npt) )
+
+  !--------------------- Read in lon/lat and flip lat
+  istatus=NF90_INQ_VARID(ncid,'longitude',id)
+  istatus=NF90_GET_VAR(ncid,id,rlon)
+
+  istatus=NF90_INQ_VARID(ncid,'latitude',id)
+  istatus=NF90_GET_VAR(ncid,id,rlat)
+  zrlat(:)=rlat(npj:1:-1)
+
+  istatus=NF90_INQ_VARID(ncid,'time',id)
+  istatus=NF90_GET_VAR(ncid,id,time)
+
+  istatus=NF90_INQ_VARID(ncid,cvar,idv)
+
+  !--------------------- create new file
+  istatus=NF90_CREATE(cfilout, NF90_CLOBBER, ncout)
+  ! define dimensions
+  istatus=NF90_DEF_DIM(ncout, 'lon', npi, idx)
+  istatus=NF90_DEF_DIM(ncout, 'lat', npj, idy)
+  istatus=NF90_DEF_DIM(ncout, 'time', NF90_UNLIMITED, idt)
+  ! define coordinates
+  istatus=NF90_DEF_VAR(ncout, 'lon', NF90_FLOAT, (/idx/), idvx)
+  istatus=NF90_DEF_VAR(ncout, 'lat', NF90_FLOAT, (/idy/), idvy)
+  istatus=NF90_DEF_VAR(ncout, 'time', NF90_FLOAT, (/idt/), idvt)
+  ! variable
+  istatus=NF90_DEF_VAR(ncout,cvar,NF90_SHORT,(/idx,idy,idt/),idv)
+
+  ! copy attributes
+  ! lon :
+  istatus=NF90_INQUIRE_VARIABLE(ncid,idvx,natts=natt)
+  DO k=1,natt
+     istatus=NF90_INQ_ATTNAME(ncid,idvx,k,catt)
+     istatus=NF90_COPY_ATT(ncid,idvx,catt,ncout,idvx)
+  ENDDO
+  ! lat :
+  istatus=NF90_INQUIRE_VARIABLE(ncid,idvy,natts=natt)
+  DO k=1,natt
+     istatus=NF90_INQ_ATTNAME(ncid,idvy,k,catt)
+     istatus=NF90_COPY_ATT(ncid,idvy,catt,ncout,idvy)
+  ENDDO
+  ! time :
+  istatus=NF90_INQUIRE_VARIABLE(ncid,idvt,natts=natt)
+  DO k=1,natt
+     istatus=NF90_INQ_ATTNAME(ncid,idvt,k,catt)
+     istatus=NF90_COPY_ATT(ncid,idvt,catt,ncout,idvt)
+  ENDDO
+  ! data:
+  istatus=NF90_INQUIRE_VARIABLE(ncid,idv,natts=natt)
+  DO k=1,natt
+     istatus=NF90_INQ_ATTNAME(ncid,idv,k,catt)
+     istatus=NF90_COPY_ATT(ncid,idv,catt,ncout,idv)
+  ENDDO
+
+  ! finish header
+  istatus=NF90_ENDDEF(ncout)
+
+  ! add values for coords
+  istatus=NF90_PUT_VAR(ncout, idvx, rlon)
+  istatus=NF90_PUT_VAR(ncout, idvy, zrlat)
+  istatus=NF90_PUT_VAR(ncout, idvt, time)
+
+  ! main loop
+  DO kt=1,npt
+
+    istatus=NF90_GET_VAR(ncid, idv, var, start=(/1,1,kt/), count=(/npi,npj,1/) )
+    ivar(:,:)=var(:,npj:1:-1)
+    istatus=NF90_PUT_VAR(ncout, idv, ivar, start=(/1,1,kt/), count=(/npi,npj,1/) )
+
+  ENDDO
+
+  istatus=NF90_CLOSE(ncid)
+  istatus=NF90_CLOSE(ncout)
+
+END PROGRAM reformat_ERA5
