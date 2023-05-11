@@ -11,7 +11,7 @@ LIBS=$(NCLIBS) $(NFLIBS)
 
 #-----------------------------------------------------
 
-EXEC = reformat_ERA5
+EXEC = reformat_ERA5 fix_radiative_ERA5
 
 #-----------------------------------------------------
 
@@ -20,6 +20,8 @@ all: $(EXEC)
 reformat_ERA5: reformat_ERA5.f90
 	$(FC) $(FFLAGS) reformat_ERA5.f90 -o reformat_ERA5 $(LIBS)
 
+fix_radiative_ERA5: fix_radiative_ERA5.f90
+	$(FC) $(FFLAGS) fix_radiative_ERA5.f90 -o fix_radiative_ERA5 $(LIBS)
 #---------------------------------------------------------
 
 clean:

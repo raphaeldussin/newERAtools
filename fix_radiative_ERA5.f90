@@ -1,11 +1,11 @@
-PROGRAM reformat_ERA5
+PROGRAM fix_radiative_ERA5
   !!-----------------------------------------------------------------------------
-  !!                 *** Program reformat_ERA5  ***
+  !!                 *** Program fix_radiative_ERA5  ***
   !!
   !!   Purpose : produce a netcdf files which is just the symetric of the
-  !!            input file.
+  !!            input file. + correct units to W/m2
   !!
-  !!   Method : read the original file, flip data and write.
+  !!   Method : read the original file, flip data, fix scale/offset and write.
   !!
   !!  history:  Adapted from J.M. Molines (Septembre 2009)
   !!            R. Dussin (May 2023)
@@ -19,6 +19,9 @@ PROGRAM reformat_ERA5
   REAL(KIND=4), DIMENSION(:), ALLOCATABLE :: time
 
   REAL(KIND=4), DIMENSION(:,:) , ALLOCATABLE :: var, ivar
+  
+  REAL, PARAMETER :: dt=3600.
+  REAL :: ao, sf
   CHARACTER(LEN=80) :: cfilin, cfilout, cvar
   CHARACTER(LEN=512) :: catt
 
@@ -110,6 +113,20 @@ PROGRAM reformat_ERA5
      istatus=NF90_INQ_ATTNAME(ncid,idv1,k,catt)
      istatus=NF90_COPY_ATT(ncid,idv1,catt,ncout,idv)
   ENDDO
+  ! override units
+  istatus=NF90_PUT_ATT(ncout,idv,'units', "W/m2")
+
+
+  !! here's the tricky part: since numbers are represented
+  !! as: X = scale_factor * x + add_offset
+  !! with X = true value and x value on file
+  !! To divide X by dt, we only need to change its representation as
+  !! X/dt = (scale_factor/dt) * x + (add_offset/dt)
+
+  istatus=NF90_GET_ATT(ncid,idv1,'scale_factor', sf)
+  istatus=NF90_GET_ATT(ncid,idv1,'add_offset', ao)
+  istatus=NF90_PUT_ATT(ncout,idv,'scale_factor', sf/dt)
+  istatus=NF90_PUT_ATT(ncout,idv,'add_offset', ao/dt)
 
   ! finish header
   istatus=NF90_ENDDEF(ncout)
@@ -123,6 +140,7 @@ PROGRAM reformat_ERA5
   DO kt=1,npt
 
     istatus=NF90_GET_VAR(ncid, idv1, var, start=(/1,1,kt/), count=(/npi,npj,1/) )
+    ! flip only, division happened in the definition of scale/offset
     ivar(:,:)=var(:,npj:1:-1)
     istatus=NF90_PUT_VAR(ncout, idv, ivar, start=(/1,1,kt/), count=(/npi,npj,1/) )
 
@@ -131,4 +149,4 @@ PROGRAM reformat_ERA5
   istatus=NF90_CLOSE(ncid)
   istatus=NF90_CLOSE(ncout)
 
-END PROGRAM reformat_ERA5
+END PROGRAM fix_radiative_ERA5
