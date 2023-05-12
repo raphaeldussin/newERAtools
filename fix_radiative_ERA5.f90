@@ -33,9 +33,9 @@ PROGRAM fix_radiative_ERA5
 
   narg=iargc()
   IF ( narg /= 3 ) THEN
-     PRINT *,' USAGE: reformat_ERA5 file variable fileout '
+     PRINT *,' USAGE: fix_radiative_ERA5 file variable fileout '
      PRINT *,'      produces fileout symetric to the input file '
-     PRINT *,'      with same variables and attributes '
+     PRINT *,'      with variable in W/m2 '
      STOP
   ENDIF
 

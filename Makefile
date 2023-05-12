@@ -11,7 +11,7 @@ LIBS=$(NCLIBS) $(NFLIBS)
 
 #-----------------------------------------------------
 
-EXEC = reformat_ERA5 fix_radiative_ERA5
+EXEC = reformat_ERA5 fix_radiative_ERA5 merge_precips_ERA5 compute_q2_ERA5
 
 #-----------------------------------------------------
 
@@ -22,6 +22,13 @@ reformat_ERA5: reformat_ERA5.f90
 
 fix_radiative_ERA5: fix_radiative_ERA5.f90
 	$(FC) $(FFLAGS) fix_radiative_ERA5.f90 -o fix_radiative_ERA5 $(LIBS)
+
+merge_precips_ERA5: merge_precips_ERA5.f90
+	$(FC) $(FFLAGS) merge_precips_ERA5.f90 -o merge_precips_ERA5 $(LIBS)
+
+compute_q2_ERA5: compute_q2_ERA5.f90
+	$(FC) $(FFLAGS) compute_q2_ERA5.f90 -o compute_q2_ERA5 $(LIBS)
+
 #---------------------------------------------------------
 
 clean:
