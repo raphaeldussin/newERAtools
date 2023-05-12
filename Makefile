@@ -1,6 +1,6 @@
 #----------------------------------------------------
 
-C=$(shell nf-config --fc)
+FC=$(shell nf-config --fc)
 NCFLAGS=$(shell nc-config --cflags )
 NFFLAGS=$(shell nf-config --fflags )
 NCLIBS=$(shell nc-config --libs )
