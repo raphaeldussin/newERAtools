@@ -11,7 +11,7 @@ LIBS=$(NCLIBS) $(NFLIBS)
 
 #-----------------------------------------------------
 
-EXEC = reformat_ERA5 fix_radiative_ERA5 merge_precips_ERA5 compute_q2_ERA5
+EXEC = reformat_ERA5 fix_radiative_ERA5 merge_precips_ERA5 compute_q2_ERA5 create_bogus_firstyear
 
 #-----------------------------------------------------
 
@@ -28,6 +28,9 @@ merge_precips_ERA5: merge_precips_ERA5.f90
 
 compute_q2_ERA5: compute_q2_ERA5.f90
 	$(FC) $(FFLAGS) compute_q2_ERA5.f90 -o compute_q2_ERA5 $(LIBS)
+
+create_bogus_firstyear: create_bogus_firstyear.f90
+	$(FC) $(FFLAGS) create_bogus_firstyear.f90 -o create_bogus_firstyear $(LIBS)
 
 #---------------------------------------------------------
 
