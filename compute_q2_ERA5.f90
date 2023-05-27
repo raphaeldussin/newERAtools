@@ -5,7 +5,7 @@ PROGRAM compute_q2_ERA5
   !!   Purpose : Compute the specific humidity
   !!            input file. + add precips for 2 sources
   !!
-  !!   Method : read the original file, add 2 precips, flip data, 
+  !!   Method : read the original file, add 2 precips, flip data,
   !!            adjust scale/offset and write.
   !!
   !!  history:  Adapted from J.M. Molines (Septembre 2009)
@@ -22,7 +22,7 @@ PROGRAM compute_q2_ERA5
   REAL(KIND=4), DIMENSION(:,:) , ALLOCATABLE :: d2, pres, ivar
   REAL(KIND=4), DIMENSION(:,:) , ALLOCATABLE :: var1, var2
   REAL(KIND=4), DIMENSION(:,:) , ALLOCATABLE :: d2C, e2, q2
-  
+
   REAL, PARAMETER :: reps=0.622
 
   REAL :: ao, sf, ao1, sf1, ao2, sf2
@@ -35,7 +35,7 @@ PROGRAM compute_q2_ERA5
   INTEGER :: ncid1, id1, idx1, idy1, idt1, idvx1, idvy1, idvt1, idv1
   INTEGER :: ncid2, id2, idx2, idy2, idt2, idvx2, idvy2, idvt2, idv2
   INTEGER :: ncout, idx, idy, idt, idvx, idvy, idvt, idv
-  INTEGER :: k, kt, natt
+  INTEGER :: jj, ji, k, kt, natt
 
   narg=iargc()
   IF ( narg /= 5 ) THEN
@@ -60,7 +60,7 @@ PROGRAM compute_q2_ERA5
 
   istatus=NF90_INQ_DIMID(ncid1,'longitude',id1)  ; istatus=NF90_INQUIRE_DIMENSION(ncid1,id1,len=npi)
   istatus=NF90_INQ_DIMID(ncid1,'latitude',id1)   ; istatus=NF90_INQUIRE_DIMENSION(ncid1,id1,len=npj)
-  istatus=NF90_INQ_DIMID(ncid1,'time',id1)       ; istatus=NF90_INQUIRE_DIMENSION(ncid1,id1,len=npt) 
+  istatus=NF90_INQ_DIMID(ncid1,'time',id1)       ; istatus=NF90_INQUIRE_DIMENSION(ncid1,id1,len=npt)
 
   ALLOCATE ( rlon(npi) )
   ALLOCATE ( rlat(npj), zrlat(npj) )
