@@ -19,7 +19,7 @@ PROGRAM create_bogus_firstyear
   REAL(KIND=4), DIMENSION(:), ALLOCATABLE :: time, timeout
 
   REAL(KIND=4), DIMENSION(:,:) , ALLOCATABLE :: var, ivar
-  CHARACTER(LEN=80) :: cfilin, cfilout, cvar
+  CHARACTER(LEN=512) :: cfilin, cfilout, cvar
   CHARACTER(LEN=512) :: catt
 
 

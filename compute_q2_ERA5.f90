@@ -26,7 +26,7 @@ PROGRAM compute_q2_ERA5
   REAL, PARAMETER :: reps=0.622
 
   REAL :: ao, sf, ao1, sf1, ao2, sf2
-  CHARACTER(LEN=80) :: cfilin1, cfilin2, cfilout, cvar, cvar1, cvar2
+  CHARACTER(LEN=512) :: cfilin1, cfilin2, cfilout, cvar, cvar1, cvar2
   CHARACTER(LEN=512) :: catt, clongname1, clongname2
 
 

@@ -19,7 +19,7 @@ PROGRAM reformat_ERA5
   REAL(KIND=4), DIMENSION(:), ALLOCATABLE :: time
 
   REAL(KIND=4), DIMENSION(:,:) , ALLOCATABLE :: var, ivar
-  CHARACTER(LEN=80) :: cfilin, cfilout, cvar
+  CHARACTER(LEN=512) :: cfilin, cfilout, cvar
   CHARACTER(LEN=512) :: catt
 
 
@@ -44,11 +44,11 @@ PROGRAM reformat_ERA5
   PRINT *, "output in: ", TRIM(cfilout)
 
   !--------------------- open input file
-  istatus=NF90_OPEN(cfilin,NF90_NOWRITE,ncid)
+  istatus=NF90_OPEN(TRIM(cfilin),NF90_NOWRITE,ncid)
 
   istatus=NF90_INQ_DIMID(ncid,'longitude',id)  ; istatus=NF90_INQUIRE_DIMENSION(ncid,id,len=npi)
   istatus=NF90_INQ_DIMID(ncid,'latitude',id)   ; istatus=NF90_INQUIRE_DIMENSION(ncid,id,len=npj)
-  istatus=NF90_INQ_DIMID(ncid,'time',id)       ; istatus=NF90_INQUIRE_DIMENSION(ncid,id,len=npt) 
+  istatus=NF90_INQ_DIMID(ncid,'time',id)       ; istatus=NF90_INQUIRE_DIMENSION(ncid,id,len=npt)
 
   ALLOCATE ( rlon(npi) )
   ALLOCATE ( rlat(npj), zrlat(npj) )

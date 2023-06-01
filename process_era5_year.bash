@@ -1,9 +1,9 @@
 #!/bin/bash
 
-module load netcdf-fortran/4.5.3
 module load netcdf-c/4.8.1
+module load netcdf-fortran/4.5.3
 
-year=1980
+year=$1
 
 # nothing to do except flip upside down and time unlimited
 reformat_ERA5 ./original/ERA5_10m_u_component_of_wind_${year}.nc u10 ./processed/ERA5_10m_u_component_of_wind_${year}.nc

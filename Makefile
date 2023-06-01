@@ -35,7 +35,7 @@ create_bogus_firstyear: create_bogus_firstyear.f90
 #---------------------------------------------------------
 
 clean:
-	\rm -f $(EXEC) *~
+	\rm -f $(EXEC)
 
 install: all
 	mv $(EXEC) ../bin

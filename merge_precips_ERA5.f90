@@ -5,7 +5,7 @@ PROGRAM merge_precips_ERA5
   !!   Purpose : produce a netcdf files which is just the symetric of the
   !!            input file. + add precips for 2 sources
   !!
-  !!   Method : read the original file, add 2 precips, flip data, 
+  !!   Method : read the original file, add 2 precips, flip data,
   !!            adjust scale/offset and write.
   !!
   !!  history:  Adapted from J.M. Molines (Septembre 2009)
@@ -20,10 +20,10 @@ PROGRAM merge_precips_ERA5
   REAL(KIND=4), DIMENSION(:), ALLOCATABLE :: time
 
   REAL(KIND=4), DIMENSION(:,:) , ALLOCATABLE :: var1, var2, ivar
-  
+
   REAL, PARAMETER :: dt=3600.
   REAL :: ao, sf, ao1, sf1, ao2, sf2
-  CHARACTER(LEN=80) :: cfilin1, cfilin2, cfilout, cvar, cvar1, cvar2
+  CHARACTER(LEN=512) :: cfilin1, cfilin2, cfilout, cvar, cvar1, cvar2
   CHARACTER(LEN=512) :: catt, clongname1, clongname2
 
 
@@ -58,7 +58,7 @@ PROGRAM merge_precips_ERA5
 
   istatus=NF90_INQ_DIMID(ncid1,'longitude',id1)  ; istatus=NF90_INQUIRE_DIMENSION(ncid1,id1,len=npi)
   istatus=NF90_INQ_DIMID(ncid1,'latitude',id1)   ; istatus=NF90_INQUIRE_DIMENSION(ncid1,id1,len=npj)
-  istatus=NF90_INQ_DIMID(ncid1,'time',id1)       ; istatus=NF90_INQUIRE_DIMENSION(ncid1,id1,len=npt) 
+  istatus=NF90_INQ_DIMID(ncid1,'time',id1)       ; istatus=NF90_INQUIRE_DIMENSION(ncid1,id1,len=npt)
 
   ALLOCATE ( rlon(npi) )
   ALLOCATE ( rlat(npj), zrlat(npj) )
