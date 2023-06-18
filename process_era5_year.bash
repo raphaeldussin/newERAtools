@@ -25,4 +25,4 @@ fix_radiative_ERA5 ./original/ERA5_surface_thermal_radiation_downwards_${year}.n
 # combine precips
 merge_precips_ERA5 ./original/ERA5_convective_rain_rate_${year}.nc ./original/ERA5_large_scale_rain_rate_${year}.nc crr lsrr ./processed/ERA5_total_rainfall_rate_${year}.nc rain
 
-merge_precips_ERA5 ./original/ERA5_convective_snowfall_rate_water_equivalent_${year}.nc ./original/ERA5_large_scale_snowfall_rate_water_equivalentrunoff_${year}.nc csfr lssfr ./processed/ERA5_total_snowfall_rate_${year}.nc snow
+merge_precips_ERA5 ./original/ERA5_convective_snowfall_rate_water_equivalent_${year}.nc ./original/ERA5_large_scale_snowfall_rate_water_equivalent_${year}.nc csfr lssfr ./processed/ERA5_total_snowfall_rate_${year}.nc snow

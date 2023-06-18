@@ -24,7 +24,7 @@ PROGRAM merge_precips_ERA5
   REAL, PARAMETER :: dt=3600.
   REAL :: ao, sf, ao1, sf1, ao2, sf2
   CHARACTER(LEN=512) :: cfilin1, cfilin2, cfilout, cvar, cvar1, cvar2
-  CHARACTER(LEN=512) :: catt, clongname1, clongname2
+  CHARACTER(LEN=1024) :: catt, clongname1, clongname2
 
 
   ! netcdf stuff

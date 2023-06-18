@@ -11,7 +11,8 @@ LIBS=$(NCLIBS) $(NFLIBS)
 
 #-----------------------------------------------------
 
-EXEC = reformat_ERA5 fix_radiative_ERA5 merge_precips_ERA5 compute_q2_ERA5 create_bogus_firstyear
+EXEC = reformat_ERA5 fix_radiative_ERA5 merge_precips_ERA5 compute_q2_ERA5 \
+       create_bogus_firstyear
 
 #-----------------------------------------------------
 
