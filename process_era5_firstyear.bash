@@ -22,6 +22,6 @@ create_bogus_firstyear ./processed/ERA5_surface_solar_radiation_downwards_${year
 
 create_bogus_firstyear ./processed/ERA5_surface_thermal_radiation_downwards_${year}.nc strd ./processed/ERA5_surface_thermal_radiation_downwards_${yearm1}.nc
 
-create_bogus_firstyear ./processed/ERA5_total_rainfall_rate_${year}.nc rain ./processed/ERA5_total_rainfall_rate_${yearm1}.nc
+create_bogus_firstyear_float ./processed/ERA5_total_rainfall_rate_${year}.nc rain ./processed/ERA5_total_rainfall_rate_${yearm1}.nc
 
-create_bogus_firstyear ./processed/ERA5_total_snowfall_rate_${year}.nc snow ./processed/ERA5_total_snowfall_rate_${yearm1}.nc
+create_bogus_firstyear_float ./processed/ERA5_total_snowfall_rate_${year}.nc snow ./processed/ERA5_total_snowfall_rate_${yearm1}.nc
