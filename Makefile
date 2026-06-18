@@ -12,11 +12,14 @@ LIBS=$(NCLIBS) $(NFLIBS)
 #-----------------------------------------------------
 
 EXEC = reformat_ERA5 fix_radiative_ERA5 merge_precips_ERA5 compute_q2_ERA5 \
-       create_bogus_firstyear create_bogus_firstyear_float
+       create_bogus_firstyear create_bogus_firstyear_float revert_ERA5
 
 #-----------------------------------------------------
 
 all: $(EXEC)
+
+revert_ERA5: revert_ERA5.f90
+	$(FC) $(FFLAGS) revert_ERA5.f90 -o revert_ERA5 $(LIBS)
 
 reformat_ERA5: reformat_ERA5.f90
 	$(FC) $(FFLAGS) reformat_ERA5.f90 -o reformat_ERA5 $(LIBS)

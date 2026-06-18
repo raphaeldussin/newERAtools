@@ -1,6 +1,6 @@
 #!/bin/bash
 
-fyear=1979
+fyear=2019
 lyear=2022
 
 # concurrent download (for large bandwidth)
