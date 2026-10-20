@@ -19,39 +19,26 @@ def format_two_digits(value):
 
 ### -------------------- lowest level ---------------------------------------------------
 
-def download_lowest_level(args):
-    dataset = "reanalysis-era5-pressure-levels"
-    request = {
-        "product_type": ["reanalysis"],
-        "variable": [
-            "geopotential",
-            "specific_humidity",
-            "temperature",
-            "u_component_of_wind",
-            "v_component_of_wind"
-        ],
-        "year": [str(args.year)],
-        "month": [str(args.month)],
-        "day": [str(args.days)],
-        "time": [
-            "00:00", "01:00", "02:00",
-            "03:00", "04:00", "05:00",
-            "06:00", "07:00", "08:00",
-            "09:00", "10:00", "11:00",
-            "12:00", "13:00", "14:00",
-            "15:00", "16:00", "17:00",
-            "18:00", "19:00", "20:00",
-            "21:00", "22:00", "23:00"
-        ],
-        "pressure_level": ["1000"],
-        "data_format": "netcdf",
-        "download_format": "unarchived"
-    }
+def download_lowest_model_level(args):
+    """ Download the lowest model level through MARS server """
 
+    # 1. Download atmospheric data for Level 137
     client = cdsapi.Client()
-    client.retrieve(dataset, request, f"ERA5_y{args.year}m{args.month}d{args.days}_1000hPa.nc")
-    return None
+    client.retrieve('reanalysis-era5-complete', {
+        'class': 'ea',
+        'date': f"{args.year}-{args.month}-{args.days}",
+        'expver': '1',
+        'levelist': '137',
+        'levtype': 'ml',
+        'param': '130/131/132/133', # t, u, v, q
+        'stream': 'oper',
+        'time': '00/to/23/by/1',
+        'type': 'an',
+        'grid'    : '0.25/0.25',
+        'format'  : 'netcdf',
+    }, f"ERA5_y{args.year}m{args.month}d{args.days}_lev137.nc")
 
+    return None
 
 ### -------------------- standard level ---------------------------------------------------
 # we have to split the instant and accumulated fields, otherwise they get bundled inside zip file
@@ -216,7 +203,7 @@ def main():
     print(f"Combined Date:   {args.year}-{args.month}-{args.days}")
 
     # lowest pressure level
-    download_lowest_level(args)
+    download_lowest_model_level(args)
 
     # near-surface
     download_single_level_inst(args)
