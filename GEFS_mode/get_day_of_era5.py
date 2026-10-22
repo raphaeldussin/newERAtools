@@ -202,7 +202,7 @@ def main():
     print(f"Formatted Days:  {args.days}")
     print(f"Combined Date:   {args.year}-{args.month}-{args.days}")
 
-    # lowest pressure level
+    # lowest model level
     download_lowest_model_level(args)
 
     # near-surface

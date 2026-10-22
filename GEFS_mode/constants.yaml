@@ -1,0 +1,8 @@
+solar:
+  visible_direct: 0.285
+  visible_diffuse: 0.285
+  near_IR_direct: 0.215
+  near_IR_diffuse: 0.215
+constants:
+  Rd: 287.0597  # Gas constant for dry air (J/kg·K)
+  g: 9.80665    # Gravity (m/s^2)

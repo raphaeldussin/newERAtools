@@ -3,6 +3,8 @@
 import xarray as xr
 import numpy as np
 import argparse
+import yaml
+
 
 def format_year(value):
     """Parses the input to an integer and formats it as a 4-digit string."""
@@ -41,7 +43,7 @@ def main():
     parser.add_argument('-y', '--year', type=format_year, required=True, help="Year (e.g., 2026 or 99)")
     parser.add_argument('-m', '--month', type=format_two_digits, required=True, help="Month (e.g., 9)")
     parser.add_argument('-d', '--days', type=format_two_digits, required=True, help="Days (e.g., 5)")
-    parser.add_argument('-f', '--flip', type=bool, required=False, default=False, help="flip latitudes")
+    parser.add_argument('--flip', action=argparse.BooleanOptionalAction, help="flip latitudes")
 
     args = parser.parse_args()
 
@@ -54,6 +56,23 @@ def main():
 
     year = args.year ; month = args.month ; days = args.days
     flip = args.flip
+
+    with open('constants.yaml', 'r') as file:
+        param = yaml.safe_load(file)
+
+    # Syntax: dictionary.get('key', default_value)
+    gas_constant = param.get('constants', {}).get('Rd', 287.0597)
+    gravity = param.get('constants', {}).get('g', 9.80665)
+
+    print(f"Constants - Rd = {gas_constant}, g = {gravity}")
+
+    vis_dir = param.get('solar', {}).get('visible_direct', 0.285)
+    vis_dif = param.get('solar', {}).get('visible_diffuse', 0.285)
+    nir_dir = param.get('solar', {}).get('near_IR_direct', 0.215)
+    nir_dif = param.get('solar', {}).get('near_IR_diffuse', 0.215)
+
+    print(f"Visible Diffuse: {vis_dif}, Direct: {vis_dir}")
+    print(f"Near InfraRed Diffuse: {nir_dif}, Direct: {nir_dir}")
 
     # ----------------------------------------------------------------------------------------
     # create dataset
@@ -102,16 +121,16 @@ def main():
     # nbdsf_ave = Near IR Beam Downward Solar Flux = sw_flux_nir_dir_dn = 0.215 * solar
     # nddsf_ave = Near IR Diffuse Downward Solar Flux = sw_flux_nir_dif_dn = 0.215 * solar
 
-    out["vbdsf_ave"] = 0.285 * out["DSWRF"]
+    out["vbdsf_ave"] = vis_dir * out["DSWRF"]
     out["vbdsf_ave"].attrs.update({"units": "W/m**2", "long_name": "Visible Beam Downward Solar Flux"})
 
-    out["vddsf_ave"] = 0.285 * out["DSWRF"]
+    out["vddsf_ave"] = vis_dif * out["DSWRF"]
     out["vddsf_ave"].attrs.update({"units": "W/m**2", "long_name": "Visible Diffuse Downward Solar Flux"})
 
-    out["nbdsf_ave"] = 0.215 * out["DSWRF"]
+    out["nbdsf_ave"] = nir_dir * out["DSWRF"]
     out["nbdsf_ave"].attrs.update({"units": "W/m**2", "long_name": "Near IR Beam Downward Solar Flux"})
 
-    out["nddsf_ave"] = 0.215 * out["DSWRF"]
+    out["nddsf_ave"] = nir_dif * out["DSWRF"]
     out["nddsf_ave"].attrs.update({"units": "W/m**2", "long_name": "Near IR Diffuse Downward Solar Flux"})
 
     # ----------------------------------------------------------------------------------------
@@ -178,8 +197,8 @@ def main():
 
     # Compute pressure and Height AGL (Above ground level) for model level 137
     # Constants
-    Rd = 287.0597  # Gas constant for dry air (J/kg·K)
-    g = 9.80665    # Gravity (m/s^2)
+    Rd = gas_constant  # Gas constant for dry air (J/kg·K)
+    g = gravity        # Gravity (m/s^2)
 
     # t = temperature at level 137 (Kelvin)
     # q = specific humidity at level 137 (kg/kg)
