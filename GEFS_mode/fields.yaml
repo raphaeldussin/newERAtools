@@ -1,0 +1,72 @@
+radsw:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/surface"
+  file: "ERA5_surface_solar_radiation_downwards_YYYY.nc"
+  var: "ssrd"
+radlw:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/surface"
+  file: "ERA5_surface_thermal_radiation_downwards_YYYY.nc"
+  var: "strd"
+u10:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/surface"
+  file: "ERA5_10m_u_component_of_wind_YYYY.nc"
+  var: "u10"
+v10:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/surface"
+  file: "ERA5_10m_v_component_of_wind_YYYY.nc"
+  var: "v10"
+t2:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/surface"
+  file: "ERA5_2m_temperature_YYYY.nc"
+  var: "t2m"
+d2:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/surface"
+  file: "ERA5_2m_dewpoint_temperature_YYYY.nc"
+  var: "d2m"
+sp:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/surface"
+  file: "ERA5_surface_pressure_YYYY.nc"
+  var: "sp"
+total_precip:
+  path:
+  file:
+  var: "precip"
+total_rain:
+  path:
+  file:
+  var: "rain"
+total_snow:
+  path:
+  file:
+  var: "snow"
+conv_rain:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/surface"
+  file: "ERA5_convective_rain_rate_YYYY.nc"
+  var: "crr"
+ls_rain:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/surface"
+  file: "ERA5_large_scale_rain_rate_YYYY.nc"
+  var: "lsrr"
+conv_snow:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/surface"
+  file: "ERA5_convective_snowfall_rate_water_equivalent_YYYY.nc"
+  var: "csfr"
+ls_snow:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/surface"
+  file: "ERA5_large_scale_snowfall_rate_water_equivalent_YYYY.nc"
+  var: "lssfr"
+tbot:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/lev137"
+  file: "ERA5_temperature_YYYY_lev137.nc"
+  var: "t"
+qbot:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/lev137"
+  file: "ERA5_specific_humidity_YYYY_lev137.nc"
+  var: "q"
+ubot:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/lev137"
+  file: "ERA5_u_component_of_wind_YYYY_lev137.nc"
+  var: "u"
+vbot:
+  path: "/scratch4/NCEPDEV/marine/Raphael.Dussin/ERA5/lev137"
+  file: "ERA5_v_component_of_wind_YYYY_lev137.nc"
+  var: "v"
